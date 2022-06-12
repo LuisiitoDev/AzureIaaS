@@ -24,4 +24,22 @@ Paso 8: Establecer una regla de entrada en el grupo de seguridad de red.
 
 az network nsg rule create -g PlatziBalancer --nsg-name myNetworkSecurityGroup --name myNetworkSecurityGroupRule --priority 1001 --protocol tcp --destination-port-range 80
 
+Paso 9: Crear 3 interfaces de red, una para cada máquina virtual.
+
+for i in `seq 1 3`; do
+> az network nic create  -g PlatziBalancer --name myNic$i --vnet-name myVnet --subnet mySubnet --network-security-group myNetworkSecurityGroup --lb-name myLoadBalancer --lb-address-pools myBackEndPool
+> done
+
+Paso 10: Crear un conjunto de disponibilidad.
+
+az vm availability-set create -g PlatziBalancer --name myAvailabilitySet
+
+
+Paso 11: Crear un archivo de instalación y configuración de arranque para las máquinas virtuales. Este archivo lo puedes encontrar en la sección de recursos de la clase.
+
+Paso 12: Crear 3 máquinas virtuales.
+
+for i `seq 1 3`; do
+> az vm create -g PlatziBalancer --name myVM$i --availability-set myAvailabilitySet --nics myNic$i --image UbuntuLTS --admin-username azureuser --generate-ssh-key --custom-data cloud-init.txt --no-wait
+> done
 
