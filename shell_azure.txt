@@ -1,0 +1,9 @@
+*/ FOR CREATING A AZURE GROUP
+
+az group create --name platziBalancer --location eastus
+
+*/ FOR CREATING NETWORK
+
+az network public-ip crate --resource-group platziBalancer --name myPublicIP
+
+
